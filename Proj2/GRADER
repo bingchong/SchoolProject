@@ -1,0 +1,497 @@
+                                     GRADER
+
+Name of student running submit: Bing Chong Lim
+Login of student running submit: cs61b-gw
+
+Second team member's name: Joy Jeng
+Second team member's login: cs61b-gu
+
+Third team member's name (if any): Jin Myung Kwak
+Third team member's login: cs61b-xv
+
+IMPORTANT:  Once you've submitted Project 2 once, the same team member should
+submit always.  If a different teammate must submit, inform cs61b@cory.eecs of
+all the details.  Include a complete list of team members, and let us know
+which submission you want graded.
+
+If you've submitted your project once, or even written a substantial amount of
+code together, you may not change partners without the permission of the
+instructor.
+===============================================================================
+Does your program compile without errors?
+
+Yes.
+
+Have you tested your program on the machines in the Soda CS 61B lab?
+
+Yes.
+
+Did you successfully implement game tree search?  Did you successfully
+implement alpha-beta pruning?  Are there any limitations on it?  What is the
+default number of search levels set by the one-parameter MachinePlayer
+constructor?
+
+Yes, we successfully implemented game tree search and alpha-beta pruning. 
+A limitation is that the searchdepth has to be larger than 1.
+When we first call chooseMove, alpha has to be the minimum possible score and beta has to be the maximum possible score. This ensures that the value of alpha and beta will be modified while implementing the game tree search.
+The scores assigned to alpha and beta has to be within the maximum possible score and the minimum possible score.
+The default number of seach levels set by the one-parameter MachinePlayer constructor is 3. 
+
+Describe your board evaluation function in some detail.
+
+The evaluation function assigns a score between -1 to 1. 
+Value greater than 0 shows that WHITE player has a higher chance of winning.
+While values less than 0 shows that BLACK player has a higher chance of winning.
+
+The evaluation function uses the hasNetwork method to check if there is any exisiting network on the current board.
+If there is, the game has ended and it will return -1 if BLACK has a network or return 1 if WHITE has a network.
+
+The evaluation function uses the connections method to calculate the number of connections each piece has.
+The greater the number of connections, the higher the chances of winning, since there are more possible ways to form a network.
+The evaluation function will assign different scores, depending on the color of the pieces and connections and sum up the scores.
+
+The evaluation function checks for the number of pieces at the goals and if there are too many pieces in the goal area, there's a smaller chance of winning. 
+Because there's lesser pieces in the middle of the board to form the network. 
+
+Evaluation function checks the number of valid moves for WHITE and BLACK players. 
+The greater the number of valid moves available, the higher the chances of winning, since there are more choices to place the pieces to come up with a network.
+
+Evaluation function checks the number of connections that the pieces in the goal area have. 
+The greater the number of connections at the goal area, the higher the chances of winnning since there are more ways to connect to the goal piece.
+
+Does your MachinePlayer use any special method of choosing the first few moves?
+
+Yes. We chose (0,3) as the first move for the white player and (3,0) as the first move for the black player.
+Placing the first piece in the middle of the goal area increases the number of possible connections from the goal area.
+
+Is there anything else the graders should know to help them read your project?
+
+
+
+Describe the classes, modules, and interfaces you designed before and while you
+implemented the project.  Your description should include:
+  -  A list of the classes your program uses.
+  -  A list of each of the "modules" used in or by MachinePlayer, similar to
+     the list in the "Teamwork" section of the README (but hopefully more
+     detailed).
+  -  For each module, list the class(es) the module is implemented in.
+  -  For each module, say which of your team members implemented it.
+  -  For each module, describe its interface--specifically, the prototype and
+     behavior of each method that is available for external callers (outside
+     the module) to call.  Don't include methods that are only meant to be
+     called from within the module.
+
+     For each method, provide (1) a method prototype and (2) a complete,
+     unambiguous description of the behavior of the method/module.  This
+     description should also appear before the method in your code's comments.
+
+You will probably need to change some of your design decisions as you go; be
+sure to modify this file to reflect these changes before you submit your
+project.  Your design of classes and interfaces with be worth about 10% of your
+grade.
+
+
+---------------------------------------------------------------------------------------------------|
+Classes: MachinePlayer, BestMove, GameBoard, Coordinate, DList, DListNode                          |
+---------------------------------------------------------------------------------------------------|
+Coder    |  Module    |  methods                                       |  class the methods are in |
+---------|------------|------------------------------------------------|---------------------------|
+Joy      |   1        |   boolean isValidMove(Move move, int color)    |  class GameBoard          |
+         |            |   void updateBoard(Move move, int color)  	 |                           |
+	  |		 |   int totalNumPieces()				 |                           |
+---------|------------|------------------------------------------------|                           |
+Bing     |   2        |   DList validMoves(int color)                  |                           |
+---------|------------|------------------------------------------------|                           |
+Joy      |   3        |   Coordinate[] connections(Coordinate c)       |                           |
+         |            |   boolean hasANetwork(int color)               |                           |
+---------|------------|------------------------------------------------|                           |
+Bing     |   4        |   double evaluation()                          |                           |
+---------|------------|------------------------------------------------|---------------------------|
+Joy      |   5        |   String toString()                            |   class Coordinate        |
+---------|------------|------------------------------------------------|---------------------------|
+Jin      |   6        |                                                |   class BestMove          |
+---------|------------|------------------------------------------------|---------------------------|
+Jin      |   7        |   methods in MachinePlayer                     |  class MachinePlayer      |
+         |            |                                                |                           |
+         |            |   BestMove minimax(int color, double alpha, double beta, int searchdepth)  |
+---------|------------|------------------------------------------------|---------------------------|
+
+-------------------------------------------------------------------------------------------------------------------------|
+Module 1 (interface description):												         |
+-------------------------------------------------------------------------------------------------------------------------|
+boolean isValidMove (Move move, int color)											  |
+																	  |
+-takes in a move object and its color as arguments										  |
+-returns a boolean to verify the validity of the move										  |
+-returns false if the move is not legitimate											  |
+-returns true if the move is legitimate												  |
+-------------------------------------------------------------------------------------------------------------------------|
+void updateBoard (Move move, int color)												  |
+																	  |
+-takes in a move object and its color as arguments										  |
+-modifies the current board depending on the type of move object passed in							  |
+-does not return any value														  |
+-------------------------------------------------------------------------------------------------------------------------|
+int totalNumPieces()															  |
+																	  |
+-does not take in any arguments													  |
+-adds up the number of black and white pieces on the board									  |
+-return the total number of pieces on the board											  |
+																	  |
+-------------------------------------------------------------------------------------------------------------------------|
+Module 2 (interface description):													  |
+-------------------------------------------------------------------------------------------------------------------------|
+DList validMoves(int color)														  |
+																	  |
+-takes in a color as its argument													  |
+-generates a DList that contains a move object in each node to record all the possible valid moves			  |
+-returns a DList of move objects													  |
+-------------------------------------------------------------------------------------------------------------------------|
+Module 3 (interface description):													  |
+-------------------------------------------------------------------------------------------------------------------------|
+Coordinate[] connections(Coordinate c) 												  |
+																	  |
+-takes in a coordinate object													  |
+-creates an array of references to coordinate objects that stores information about pieces connected to the current piece|
+-returns an array of references to coordinate objects										  |
+-------------------------------------------------------------------------------------------------------------------------|
+boolean hasANetwork(int color)													  |
+																	  |
+-takes in the color of the piece as argument											  |
+-checks the current game board for a network for the particular color								  |
+-returns true if there exists a network for the particular color  								  |
+-returns false if there does not exist a network for the particular color							  |
+-------------------------------------------------------------------------------------------------------------------------|
+Module 4 (interface description):													  |
+-------------------------------------------------------------------------------------------------------------------------|
+double evaluation()															  |
+																	  |
+-does not take in any argument													  |
+-evaluates the current game board and assigns it a score									  |
+-implements various strategies by calling methods such as hasANetwork, and connections to predict the outcome of the game|
+-------------------------------------------------------------------------------------------------------------------------|
+
+-------------------------------------------------------------------------------------------------------------------------
+Class: Move
+-public class that holds all the fields in a move
+-------------------------------------------------------------------------------------------------------------------------
+Method:
+public String toString()
+-------------------------------------------------------------------------------------------------------------------------
+Description:
+-Converts the move to a String
+-------------------------------------------------------------------------------------------------------------------------
+
+-------------------------------------------------------------------------------------------------------------------------
+Class: BestMove
+-Extends Move Class
+-Used to store a Move object and the score of the current gameboard
+-------------------------------------------------------------------------------------------------------------------------
+
+-------------------------------------------------------------------------------------------------------------------------
+Class: Coordinate
+-A representation of a piece on the board that contains the color and the coordinates attributes
+-------------------------------------------------------------------------------------------------------------------------
+Method:
+public Coordinate (int x, int y, int color)
+
+Description:
+-Constructor for the Coordinate class
+-Initializes the Coordinate object by storing the coordinate and color of a particular piece
+-------------------------------------------------------------------------------------------------------------------------
+Method:
+public String toString()
+
+Description:
+-returns a String representation of the Coordinate object
+-------------------------------------------------------------------------------------------------------------------------
+Method:
+public String color()
+
+Description:
+-returns a String representation of the color of the piece that the Coordinate object is holding
+-------------------------------------------------------------------------------------------------------------------------
+Method:
+public boolean equals(Coordinate c)
+
+Description:
+-Compares the information stored inside two Coordinate objects and determines whether the two Coordinate objects are the same
+-------------------------------------------------------------------------------------------------------------------------
+
+-------------------------------------------------------------------------------------------------------------------------
+Class: GameBoard
+-Contains the current state of the gameboard and keeps track of all the pieces on the board
+-------------------------------------------------------------------------------------------------------------------------
+Method:
+public GameBoard()
+
+Description:
+-Default constructor for GameBoard that initializes an empty board
+-------------------------------------------------------------------------------------------------------------------------
+Method:
+public GameBoard(Coordinate[] c)
+
+Description:
+-Constructor for GameBoard that takes in a list of Coordinate objects and initializes the gameboard accordingly
+-Reads the coordinates and color from the Coordinate object and places the respective pieces on the current game board
+-------------------------------------------------------------------------------------------------------------------------
+Method:
+protected GameBoard copy()
+
+Description:
+-Creates a new GameBoard object that is a replicate of the current GameBoard and return it
+-------------------------------------------------------------------------------------------------------------------------
+Method:
+protected int totalNumPieces()
+
+Description:
+-Sums up the number of black and white pieces on the board
+-Returns the total number of pieces on the board
+-------------------------------------------------------------------------------------------------------------------------
+Method:
+protected boolean isValidMove(Move move, int color)
+
+Description:
+-Takes in a move object and checks if the move is a valid move (fulfills the rules of the game)
+-If the move is a step move, it uses the isValidStepMove method to validate the step move
+-Returns false if the move does not fulfills the conditions
+-Returns true if the move fulfills the conditions
+-------------------------------------------------------------------------------------------------------------------------
+Method:
+protected boolean isValidStepMove(Move move, int color)
+
+Description:
+-Takes in a step move and checks if it is a valid move
+-Returns true if the move is valid
+-Returns false if the move is not valid
+-------------------------------------------------------------------------------------------------------------------------
+Method:
+protected boolean notThreeInCluster(int x, int y, int color)
+
+Description:
+-Takes in a 'x' and 'y' coordinate and checks if there are 3 pieces of the same color being side by side
+-Calls the checkNeighbors method to obtain the number of pieces that are of the same color surrounding the current piece
+-------------------------------------------------------------------------------------------------------------------------
+Method:
+private List checkNeighbors(int x, int y, int color)
+
+Description:
+-Creates a list that stores the coordinates of the surrounding pieces that has the same color as the current piece
+-Checks the grids surrounding the current piece
+-If the adjacent piece has the same color, it stores the coordinates and color into a Coordinate object and appends it into a list
+-Returns the list of Coordinates objects that contains the information of the pieces adjacent to the current piece
+-------------------------------------------------------------------------------------------------------------------------
+Method:
+protected List validMoves(int color)
+
+Description:
+-Checks the board for all the valid moves for a particular color
+-Iterates through all the board and uses isValidMove method to check if the move is a valid move
+-If it is a valid move, add the move object into the list
+-Returns a list containing all the possible moves for the specified color
+-------------------------------------------------------------------------------------------------------------------------
+Method:
+protected void updateBoard(Move move, int color)
+
+Description:
+-Takes in a move object and updates the current board 
+-------------------------------------------------------------------------------------------------------------------------
+Method:
+protected double evaluation()
+
+Description:
+-Generates a score for the current board
+-Uses helper functions: checkHasNetwork(), checkConnections(), checkGoals(), numOfValidMoves(), and checkConnectionOfGoals() 
+to generate the score for the current board
+-------------------------------------------------------------------------------------------------------------------------
+Method:
+private double checkHasNetwork()
+
+Description:
+-Check if there is any existing network on the board
+-If there is an existing network for white, return the maximum positive score of 1
+-If there is an existing network for black, return the maximum negative score of -1
+-If there is no existing network, return 0
+-------------------------------------------------------------------------------------------------------------------------
+Method:
+private double checkConnections()
+
+Description:
+-Generate a score for the current board depending solely on the total number of connections that each side has
+-The greater the number of connections, the higher chance of forming a network and therefore has a greater chance of winning
+-Return a score for the current board, depending only on the total number of connections each side has
+-------------------------------------------------------------------------------------------------------------------------
+Method:
+private double checkConnectionsOfGoals()
+
+Description:
+-Assign a score to the current board depending solely on the number of connections the goal pieces have
+-If the goal pieces have more connections, there are more ways to form a network, leading to a higher chance of winning 
+-Return a score for the current board, depending only on the number of connections the goal pieces have
+-------------------------------------------------------------------------------------------------------------------------
+Method;
+private double checkGoals()
+
+Description:
+-Check the number of pieces in the goal area and assign a score to the current board
+-Having 1 piece at each side of the goal area increases the chances of winning
+-If there are too many pieces in the goal area, it would reduce the chances of winning, 
+since there are lesser pieces in the middle of the board to form a network with the goal pieces
+-Returns the score of the current board, depending only on the number of pieces in the goal area
+-------------------------------------------------------------------------------------------------------------------------
+Method:
+private double numOfValidMoves()
+
+Description:
+-Check the total number of valid moves available for each player and assign a score to the current board
+-With greater number of valid moves, there are more choices to place the pieces and come up with a better way to win
+-Returns the score of the current board, depending only on the total number of valid moves for both players
+-------------------------------------------------------------------------------------------------------------------------
+Method:
+protected Coordinate[] connections(Coordinate coor)
+
+Description:
+-Check if the current piece is connected to any other pieces of the same color
+-Used an array of length 8 to represent the 8 directions that the current piece can connect
+-Stores the reference to the coordinate object that forms a connection with the current piece in the direction corresponding to the index of the array
+-Returns the list of Coordinate objects that forms connection with the current piece
+-------------------------------------------------------------------------------------------------------------------------
+Method:
+private Coordinate findSameColor(int x, int y, int direction, int color)
+
+Description:
+-Checks the 8 different directions for pieces of the same color as the current piece
+-If an opponent's piece is blocking the path, it will proceed on to the next direction and redo the evaluation
+-If it finds a piece of the same color, it means that there is a connection between the 2 pieces in the specified direction
+-Returns a Coordinate object that contains the position and color of the piece that is connected to the current piece
+-------------------------------------------------------------------------------------------------------------------------
+Method:
+protected boolean hasANetwork(int color)
+
+Description:
+-Check if the current board contains a network for the specified color
+-Starts the evaluation from the first goal area to the next goal area
+-Uses checkPossibleChain method on the border pieces at the first goal area to check for a network
+-Returns a boolean that specifies whether there exists a network for the specified color
+-------------------------------------------------------------------------------------------------------------------------
+Method:
+private List boarderPieces(int color, int number)
+
+Description:
+-Generates a list of Coordinates objects that stores the position of the boarder pieces
+-Takes in an argument, color, to specifiy the color of the pieces 
+-Takes in a second argument, number, to specify the boarder to iterate through 
+-------------------------------------------------------------------------------------------------------------------------
+Method:
+private boolean checkPossibleChains(Coordinate start)
+
+Description:
+-Starts building a chain of connections off a boarder piece
+-Calls the generateNetworks method to see if the current boarder piece forms a network
+-Returns a boolean that shows whether a network is formed from the current boarder piece
+-------------------------------------------------------------------------------------------------------------------------
+Method:
+private boolean generateNetworks(List network, Coordinate parent, Coordinate current, int prevConnectionType, int curConnectionType)
+
+Description:
+-Helper function for hasANetwork that generates the chain of connections for a piece through recursion and checks if it forms a valid network
+-Returns true if the chain of connections forms a network from 1 goal area to the other
+-------------------------------------------------------------------------------------------------------------------------
+Method:
+private List networkWithEachConnection(Coordinate current, List oldNetwork)
+
+Description:
+-Returns the list of connections after appending a new Coordinate object to the old list
+-------------------------------------------------------------------------------------------------------------------------
+Method:
+private boolean hasRepeat(List network)
+
+Description:
+-Ensures that there is no repeated pieces in the list of Coordinate objects
+-------------------------------------------------------------------------------------------------------------------------
+Method:
+private boolean isFirstBoarder(Coordinate c)
+
+Description:
+-Check if the particular Coordinate object is in the first boarder (top row for BLACK and left-most column for WHITE)
+-------------------------------------------------------------------------------------------------------------------------
+Method:
+private boolean isSecondBoarder(Coordinate c)
+
+Description:
+-Check if the particular Coordinate object is in the second boarder (bottom row for BLACK and right-most column for WHITE)
+-------------------------------------------------------------------------------------------------------------------------
+Method:
+public void printBoard()
+
+Description:
+-Prints out the currrent game board
+-------------------------------------------------------------------------------------------------------------------------
+Method:
+public static void printCoordinates(Coordinate[] c)
+
+Description:
+-Prints out all the information stored within the list of Coordinates object
+-------------------------------------------------------------------------------------------------------------------------
+Method:
+public static String convertNum(int num)
+
+Description:
+-Converts the number representation of the pieces into a String
+-------------------------------------------------------------------------------------------------------------------------
+
+-------------------------------------------------------------------------------------------------------------------------
+Class: MachinePlayer
+-Implementation of an automatic Network player that chooses the best move given by the minimax method.
+-------------------------------------------------------------------------------------------------------------------------
+Method:
+public MachinePlayer(int color)
+
+Description:
+-Constructor for MachinePlayer that takes player’s color.
+-Initialize the opponentColor.
+-Sets the default search depth of 3.
+-Sets stepDepth to 1.
+-Creates the internal GameBoard.
+-------------------------------------------------------------------------------------------------------------------------
+Method:
+public MachinePlayer(int color, int searchDepth)
+
+Description:
+-Constructor for MachinePlayer that takes player’s color and searchDepth.
+-Assign specific searchDepth.
+-Sets stepDepth to searchDepth.
+-------------------------------------------------------------------------------------------------------------------------
+Method:
+public Move chooseMove()
+
+Description:
+-Returns a new move by machine player.
+-If the machine player make the first move, it place its color specific places. (WHITE: (0,3) BLACK:(3,0))
+-Calls the minimax function to evaluate the best move among valid moves .
+-When minimax is initially called, alpha is -1 and beta is 1.
+-Updates machine player’s move internal board.
+-------------------------------------------------------------------------------------------------------------------------
+Method:
+public boolean opponentMove(Move m)
+
+Description:
+-Returns true if the Move m is valid move otherwise returns false.
+-Updates the opponent’s move in internal board if Move m is legal.
+--------------------------------------------------------------------------------------------------------------------------
+Method:
+public boolean forceMove(Move m)
+
+Description:
+-Returns true if the Move is valid move otherwise return false.
+-Updates the machine player’s move in internal board if Move m is legal.
+-----------------------------------------------------------------------------------------------------------------------------
+Method:
+private BestMove minimax(GameBoard currentBoard, int color, double alpha, double beta,  int searchDepth)
+
+Description:
+-Takes currentBoard, color, alpha, beta, and searchDepth.
+-Returns the BestMove object which contains score and bestMove.  
+-BestMove object is determined by implementing game tree search and alpha beta pruning.
+-----------------------------------------------------------------------------------------------------------------------------
+  
